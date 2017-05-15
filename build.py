@@ -68,5 +68,13 @@ def main():
         logger.error("Failed to build GoogleMock")
         sys.exit(1)
 
+    # Build gltf2-loader
+    logger.info("Build Gltf2Loader")
+
+    gltf2_loader_builder = builders.Gltf2Loader(args, logger)
+    if not gltf2_loader_builder.build("af5c74f82d2a563d4f659aebd91c27c8143edf9d"):
+        logger.error("Failed to build Gltf2Loader")
+        sys.exit(1)
+
 if __name__ == "__main__":
     main()
