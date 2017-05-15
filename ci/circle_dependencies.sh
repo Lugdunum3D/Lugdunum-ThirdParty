@@ -35,7 +35,7 @@ if [[ ! -d "$cache_dir" || "$invalidate" = true ]]; then
     cd "$cache_dir"
 
     packages=(
-        clang-3.8 cmake     # compilation
+        clang-3.8 cmake gcc-6 g++-6     # compilation
     )
 
     for package in ${packages[*]}; do
