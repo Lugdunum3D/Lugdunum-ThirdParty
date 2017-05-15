@@ -35,11 +35,13 @@ class Shaderc():
 
         return True
 
-    def _compile(self):
-        self.logger.info("Shaderc: Configure")
+    def _compile(self, build_type):
+        self.logger.info("Shaderc: Configure for %s",  build_type)
 
-        if not os.path.isdir("shaderc/build"):
-            os.mkdir("shaderc/build")
+        build_dir = os.path.join("shaderc/build", build_type)
+
+        if not os.path.isdir(build_dir):
+            os.makedirs(build_dir)
 
         cmake_args = [
             "cmake",
@@ -47,16 +49,16 @@ class Shaderc():
             "-DENABLE_HLSL=OFF",
             "-DENABLE_GLSLANG_BINARIES=OFF",
             "-DSHADERC_SKIP_TESTS=ON",
-            "-DCMAKE_BUILD_TYPE=" + self.args.build_type,
+            "-DCMAKE_BUILD_TYPE=" + build_type,
             "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
-            ".."
+            "../.."
         ]
 
-        if subprocess.Popen(cmake_args, cwd="shaderc/build").wait():
+        if subprocess.Popen(cmake_args, cwd=build_dir).wait():
              return False
 
-        self.logger.info("Shaderc: Build")
-        if subprocess.Popen(["cmake", "--build", "."], cwd="shaderc/build").wait():
+        self.logger.info("Shaderc: Build for %s", build_type)
+        if subprocess.Popen(["cmake", "--build", "."], cwd=build_dir).wait():
              return False
 
         return True
@@ -69,13 +71,13 @@ class Shaderc():
         self.logger.info("Shaderc: Create directories")
 
         if not os.path.isdir(shaderc_root_path):
-            os.mkdir(shaderc_root_path)
+            os.makedirs(shaderc_root_path)
 
         if not os.path.isdir(shaderc_include_path):
-            os.mkdir(shaderc_include_path)
+            os.makedirs(shaderc_include_path)
 
         if not os.path.isdir(shaderc_library_path):
-            os.mkdir(shaderc_library_path)
+            os.makedirs(shaderc_library_path)
 
         self.logger.info("Shaderc: Copy include files")
 
@@ -84,16 +86,16 @@ class Shaderc():
         if not os.path.isdir(real_include_path):
             shutil.copytree("shaderc/libshaderc/include/shaderc", real_include_path)
 
-        self.logger.info("Shaderc: Copy library")
+        self.logger.info("Shaderc: Copy libraries")
 
         if platform.system() == "Linux":
-            library_file = "shaderc/build/libshaderc/libshaderc_combined.a"
+            shutil.copy("shaderc/build/Debug/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined-d.a"))
+            shutil.copy("shaderc/build/Release/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined.a"))
         elif platform.system() == "Windows":
-            library_file = "shaderc/build/libshaderc/shaderc_combined.lib"
+            shutil.copy("shaderc/build/Debug/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "shaderc_combined-d.lib"))
+            shutil.copy("shaderc/build/Release/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "shaderc_combined.lib"))
         else:
             return False
-
-        shutil.copy(library_file, shaderc_library_path)
 
         return True
 
@@ -101,7 +103,10 @@ class Shaderc():
         if not self._clone():
             return False
 
-        if not self._compile():
+        if not self._compile("Debug"):
+            return False
+
+        if not self._compile("Release"):
             return False
 
         if not self._copy_files():

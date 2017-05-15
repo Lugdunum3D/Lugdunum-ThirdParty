@@ -8,8 +8,6 @@ def main():
     # Parse argument
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--build-type", help='Specify the build type',
-                        dest='build_type', choices=["Release", "Debug"], default="Release")
     parser.add_argument("--path", "-p", help='Specify the destination directory',
                         dest='path', default="thirdparty")
     parser.add_argument('-v', '--verbose', help='Enables verbose output; '
@@ -36,7 +34,7 @@ def main():
 
     # Build directory zip
     if not os.path.isdir(args.path):
-        os.mkdir(args.path)
+        os.makedirs(args.path)
 
     # Build shaderc
     logger.info("Build Shaderc")
