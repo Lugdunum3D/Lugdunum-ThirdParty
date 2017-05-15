@@ -63,7 +63,7 @@ class Shaderc():
              return False
 
         self.logger.info("Shaderc: Build for %s", build_type)
-        if subprocess.Popen(["cmake", "--build", "."], cwd=build_dir).wait():
+        if subprocess.Popen(["cmake", "--build", ".", "--config", build_type], cwd=build_dir).wait():
              return False
 
         return True
@@ -98,8 +98,8 @@ class Shaderc():
             shutil.copy("shaderc/build/Debug/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined-d.a"))
             shutil.copy("shaderc/build/Release/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined.a"))
         elif platform.system() == "Windows":
-            shutil.copy("shaderc/build/Debug/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "shaderc_combined-d.lib"))
-            shutil.copy("shaderc/build/Release/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "shaderc_combined.lib"))
+            shutil.copy("shaderc/build/Debug/libshaderc/Debug/shaderc_combined.lib", os.path.join(shaderc_library_path, "shaderc_combined-d.lib"))
+            shutil.copy("shaderc/build/Release/libshaderc/Release/shaderc_combined.lib", os.path.join(shaderc_library_path, "shaderc_combined.lib"))
         else:
             return False
 

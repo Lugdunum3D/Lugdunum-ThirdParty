@@ -43,7 +43,7 @@ class Gltf2Loader():
              return False
 
         self.logger.info("Gltf2Loader: Build for %s", build_type)
-        if subprocess.Popen(["cmake", "--build", "."], cwd=build_dir).wait():
+        if subprocess.Popen(["cmake", "--build", ".", "--config", build_type], cwd=build_dir).wait():
              return False
 
         return True
@@ -78,8 +78,8 @@ class Gltf2Loader():
             shutil.copy("glTF2-loader/build/Debug/libgltf2-loader-d.a", os.path.join(gltf2_loader_library_path, "libgltf2-loader-d.a"))
             shutil.copy("glTF2-loader/build/Release/libgltf2-loader.a", os.path.join(gltf2_loader_library_path, "libgltf2-loader.a"))
         elif platform.system() == "Windows":
-            shutil.copy("glTF2-loader/build/Debug/gltf2-loader-d.lib", os.path.join(gltf2_loader_library_path, "gltf2-loader-d.lib"))
-            shutil.copy("glTF2-loader/build/Release/gltf2-loader.lib", os.path.join(gltf2_loader_library_path, "gltf2-loader.lib"))
+            shutil.copy("glTF2-loader/build/Debug/Debug/gltf2-loader-d.lib", os.path.join(gltf2_loader_library_path, "gltf2-loader-d.lib"))
+            shutil.copy("glTF2-loader/build/Release/Release/gltf2-loader.lib", os.path.join(gltf2_loader_library_path, "gltf2-loader.lib"))
 
         else:
             return False
