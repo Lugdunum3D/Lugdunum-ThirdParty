@@ -77,34 +77,23 @@ class GoogleMock():
         if not os.path.isdir(gtest_real_include_path):
             shutil.copytree("googletest/googletest/include/gtest", gtest_real_include_path)
 
-        self.logger.info("GoogleMock: Copy libraries")
+        for build_type in self.args.build_types:
+            self.logger.info("GoogleMock: Copy libraries %s", build_type)
 
-        if platform.system() == "Linux":
-            shutil.copy("googletest/build/Debug/googlemock/gtest/libgtest.a", os.path.join(googlemock_library_path, "libgtestd.a"))
-            shutil.copy("googletest/build/Release/googlemock/gtest/libgtest.a", os.path.join(googlemock_library_path, "libgtest.a"))
+            suffix = "d" if build_type == "Debug" else ""
 
-            shutil.copy("googletest/build/Debug/googlemock/gtest/libgtest_main.a", os.path.join(googlemock_library_path, "libgtest_maind.a"))
-            shutil.copy("googletest/build/Release/googlemock/gtest/libgtest_main.a", os.path.join(googlemock_library_path, "libgtest_main.a"))
-
-            shutil.copy("googletest/build/Debug/googlemock/libgmock.a", os.path.join(googlemock_library_path, "libgmockd.a"))
-            shutil.copy("googletest/build/Release/googlemock/libgmock.a", os.path.join(googlemock_library_path, "libgmock.a"))
-
-            shutil.copy("googletest/build/Debug/googlemock/libgmock_main.a", os.path.join(googlemock_library_path, "libgmock_maind.a"))
-            shutil.copy("googletest/build/Release/googlemock/libgmock_main.a", os.path.join(googlemock_library_path, "libgmock_main.a"))
-        elif platform.system() == "Windows":
-            shutil.copy("googletest/build/Debug/googlemock/gtest/Debug/gtest.lib", os.path.join(googlemock_library_path, "gtestd.lib"))
-            shutil.copy("googletest/build/Release/googlemock/gtest/Release/gtest.lib", os.path.join(googlemock_library_path, "gtest.lib"))
-
-            shutil.copy("googletest/build/Debug/googlemock/gtest/Debug/gtest_main.lib", os.path.join(googlemock_library_path, "gtest_maind.lib"))
-            shutil.copy("googletest/build/Release/googlemock/gtest/Release/gtest_main.lib", os.path.join(googlemock_library_path, "gtest_main.lib"))
-
-            shutil.copy("googletest/build/Debug/googlemock/Debug/gmock.lib", os.path.join(googlemock_library_path, "gmockd.lib"))
-            shutil.copy("googletest/build/Release/googlemock/Release/gmock.lib", os.path.join(googlemock_library_path, "gmock.lib"))
-
-            shutil.copy("googletest/build/Debug/googlemock/Debug/gmock_main.lib", os.path.join(googlemock_library_path, "gmock_maind.lib"))
-            shutil.copy("googletest/build/Release/googlemock/Release/gmock_main.lib", os.path.join(googlemock_library_path, "gmock_main.lib"))
-        else:
-            return False
+            if platform.system() == "Linux":
+                shutil.copy("googletest/build/" + build_type + "/googlemock/gtest/libgtest.a", os.path.join(googlemock_library_path, "libgtest" + suffix + ".a"))
+                shutil.copy("googletest/build/" + build_type + "/googlemock/gtest/libgtest_main.a", os.path.join(googlemock_library_path, "libgtest_main" + suffix + ".a"))
+                shutil.copy("googletest/build/" + build_type + "/googlemock/libgmock.a", os.path.join(googlemock_library_path, "libgmock" + suffix + ".a"))
+                shutil.copy("googletest/build/" + build_type + "/googlemock/libgmock_main.a", os.path.join(googlemock_library_path, "libgmock_main" + suffix + ".a"))
+            elif platform.system() == "Windows":
+                shutil.copy("googletest/build/" + build_type + "/googlemock/gtest/" + build_type + "/gtest.lib", os.path.join(googlemock_library_path, "gtest" + suffix + ".lib"))
+                shutil.copy("googletest/build/" + build_type + "/googlemock/gtest/" + build_type + "/gtest_main.lib", os.path.join(googlemock_library_path, "gtest_main" + suffix + ".lib"))
+                shutil.copy("googletest/build/" + build_type + "/googlemock/" + build_type + "/gmock.lib", os.path.join(googlemock_library_path, "gmock" + suffix + ".lib"))
+                shutil.copy("googletest/build/" + build_type + "/googlemock/" + build_type + "/gmock_main.lib", os.path.join(googlemock_library_path, "gmock_main" + suffix + ".lib"))
+            else:
+                return False
 
         return True
 
@@ -112,11 +101,9 @@ class GoogleMock():
         if not self._clone(tag):
             return False
 
-        if not self._compile("Debug"):
-            return False
-
-        if not self._compile("Release"):
-            return False
+        for build_type in self.args.build_types:
+            if not self._compile(build_type):
+                return False
 
         if not self._copy_files():
             return False

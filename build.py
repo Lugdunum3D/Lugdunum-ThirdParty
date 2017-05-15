@@ -13,6 +13,8 @@ def main():
     parser.add_argument('-v', '--verbose', help='Enables verbose output; '
                         'repeat up to three time for more verbose output',
                         action='count', default=0)
+    parser.add_argument("--build-types", help='Specify the build types that you want',
+                        dest='build_types', nargs='+', type=str, choices=["Debug", "Release"], default=["Debug", "Release"])
 
     args = parser.parse_args()
 

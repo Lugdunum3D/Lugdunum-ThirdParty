@@ -72,17 +72,17 @@ class Gltf2Loader():
         if not os.path.isdir(real_include_path):
             shutil.copytree("glTF2-loader/include/gltf2", real_include_path)
 
-        self.logger.info("Gltf2Loader: Copy libraries")
+        for build_type in self.args.build_types:
+            self.logger.info("Gltf2Loader: Copy libraries for %s", build_type)
 
-        if platform.system() == "Linux":
-            shutil.copy("glTF2-loader/build/Debug/libgltf2-loader-d.a", os.path.join(gltf2_loader_library_path, "libgltf2-loader-d.a"))
-            shutil.copy("glTF2-loader/build/Release/libgltf2-loader.a", os.path.join(gltf2_loader_library_path, "libgltf2-loader.a"))
-        elif platform.system() == "Windows":
-            shutil.copy("glTF2-loader/build/Debug/Debug/gltf2-loader-d.lib", os.path.join(gltf2_loader_library_path, "gltf2-loader-d.lib"))
-            shutil.copy("glTF2-loader/build/Release/Release/gltf2-loader.lib", os.path.join(gltf2_loader_library_path, "gltf2-loader.lib"))
+            suffix = "-d" if build_type == "Debug" else ""
 
-        else:
-            return False
+            if platform.system() == "Linux":
+                shutil.copy("glTF2-loader/build/" + build_type + "/libgltf2-loader" + suffix + ".a", os.path.join(gltf2_loader_library_path, "libgltf2-loader" + suffix + ".a"))
+            elif platform.system() == "Windows":
+                shutil.copy("glTF2-loader/build/" + build_type + "/" + build_type + "/gltf2-loader" + suffix + ".lib", os.path.join(gltf2_loader_library_path, "gltf2-loader" + suffix + ".lib"))
+            else:
+                return False
 
         return True
 
@@ -90,11 +90,9 @@ class Gltf2Loader():
         if not self._clone(tag):
             return False
 
-        if not self._compile("Debug"):
-            return False
-
-        if not self._compile("Release"):
-            return False
+        for build_type in self.args.build_types:
+            if not self._compile(build_type):
+                return False
 
         if not self._copy_files():
             return False

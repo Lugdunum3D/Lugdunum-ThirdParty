@@ -92,16 +92,17 @@ class Shaderc():
         if not os.path.isdir(real_include_path):
             shutil.copytree("shaderc/libshaderc/include/shaderc", real_include_path)
 
-        self.logger.info("Shaderc: Copy libraries")
+        for build_type in self.args.build_types:
+            self.logger.info("Shaderc: Copy libraries for %s", build_type)
 
-        if platform.system() == "Linux":
-            shutil.copy("shaderc/build/Debug/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined-d.a"))
-            shutil.copy("shaderc/build/Release/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined.a"))
-        elif platform.system() == "Windows":
-            shutil.copy("shaderc/build/Debug/libshaderc/Debug/shaderc_combined.lib", os.path.join(shaderc_library_path, "shaderc_combined-d.lib"))
-            shutil.copy("shaderc/build/Release/libshaderc/Release/shaderc_combined.lib", os.path.join(shaderc_library_path, "shaderc_combined.lib"))
-        else:
-            return False
+            suffix = "-d" if build_type == "Debug" else ""
+
+            if platform.system() == "Linux":
+                shutil.copy("shaderc/build/" + build_type + "/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined" + suffix + ".a"))
+            elif platform.system() == "Windows":
+                shutil.copy("shaderc/build/" + build_type + "/libshaderc/" + build_type + "/shaderc_combined.lib", os.path.join(shaderc_library_path, "shaderc_combined" + suffix + ".lib"))
+            else:
+                return False
 
         return True
 
@@ -109,11 +110,9 @@ class Shaderc():
         if not self._clone(tag):
             return False
 
-        if not self._compile("Debug"):
-            return False
-
-        if not self._compile("Release"):
-            return False
+        for build_type in self.args.build_types:
+            if not self._compile(build_type):
+                return False
 
         if not self._copy_files():
             return False
