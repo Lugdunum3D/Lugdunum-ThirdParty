@@ -44,5 +44,21 @@ def main():
         logger.error("Failed to build Shaderc")
         sys.exit(1)
 
+    # Build vulkan
+    logger.info("Build Vulkan")
+
+    vulkan_builder = builders.Vulkan(args, logger)
+    if not vulkan_builder.build():
+        logger.error("Failed to build Vulkan")
+        sys.exit(1)
+
+    # Build fmt
+    logger.info("Build Fmt")
+
+    fmt_builder = builders.Fmt(args, logger)
+    if not fmt_builder.build():
+        logger.error("Failed to build Fmt")
+        sys.exit(1)
+
 if __name__ == "__main__":
     main()
