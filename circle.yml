@@ -1,3 +1,10 @@
+dependencies:
+  cache_directories:
+    - "~/.local"
+
+  pre:
+    - ./ci/circle_dependencies.sh
+
 test:
   override:
     - mkdir build && cd build && python ../build.py -vvv
