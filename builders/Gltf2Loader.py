@@ -39,6 +39,10 @@ class Gltf2Loader():
             "../.."
         ]
 
+        if platform.system() == "Windows":
+            cmake_args.append("-G")
+            cmake_args.append("Visual Studio 14 2015 Win64")
+
         if subprocess.Popen(cmake_args, cwd=build_dir).wait():
              return False
 
