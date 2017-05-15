@@ -10,7 +10,7 @@ class Shaderc():
 
     def __init__(self, args, logger):
         self.args = args
-        self.logger = logger;
+        self.logger = logger
 
     def _clone(self):
         self.logger.info("Shaderc: Clone main repository")
@@ -70,14 +70,15 @@ class Shaderc():
 
         self.logger.info("Shaderc: Create directories")
 
-        if not os.path.isdir(shaderc_root_path):
-            os.makedirs(shaderc_root_path)
-
         if not os.path.isdir(shaderc_include_path):
             os.makedirs(shaderc_include_path)
 
         if not os.path.isdir(shaderc_library_path):
             os.makedirs(shaderc_library_path)
+
+        self.logger.info("Shaderc: Copy license file")
+
+        shutil.copy("shaderc/LICENSE", shaderc_root_path)
 
         self.logger.info("Shaderc: Copy include files")
 
