@@ -60,5 +60,13 @@ def main():
         logger.error("Failed to build Fmt")
         sys.exit(1)
 
+    # Build googlemock
+    logger.info("Build GoogleMock")
+
+    googlemock_builder = builders.GoogleMock(args, logger)
+    if not googlemock_builder.build():
+        logger.error("Failed to build GoogleMock")
+        sys.exit(1)
+
 if __name__ == "__main__":
     main()
