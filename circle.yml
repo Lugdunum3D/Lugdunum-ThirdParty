@@ -1,0 +1,3 @@
+test:
+  override:
+    - mkdir build && cd build && python ../build.py -vvv
