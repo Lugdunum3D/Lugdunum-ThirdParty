@@ -10,10 +10,16 @@ class Vulkan():
         self.args = args
         self.logger = logger
 
-    def _clone(self):
+    def _clone(self, tag):
         self.logger.info("Vulkan: Clone main repository")
+
+        repo = None
         if not os.path.isdir("vulkan"):
-            Repo.clone_from(Vulkan.git_uri, "vulkan")
+            repo = Repo.clone_from(Vulkan.git_uri, "vulkan")
+        else:
+            repo = Repo("vulkan")
+
+        repo.git.checkout(tag)
 
         return True
 
@@ -35,8 +41,8 @@ class Vulkan():
 
         return True
 
-    def build(self):
-        if not self._clone():
+    def build(self, tag="master"):
+        if not self._clone(tag):
             return False
 
         if not self._copy_files():

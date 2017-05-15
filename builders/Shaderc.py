@@ -12,10 +12,16 @@ class Shaderc():
         self.args = args
         self.logger = logger
 
-    def _clone(self):
+    def _clone(self, tag):
         self.logger.info("Shaderc: Clone main repository")
+
+        repo = None
         if not os.path.isdir("shaderc"):
-            Repo.clone_from(Shaderc.git_uri, "shaderc")
+            repo = Repo.clone_from(Shaderc.git_uri, "shaderc")
+        else:
+            repo = Repo("shaderc")
+
+        repo.git.checkout(tag)
 
         self.logger.info("Shaderc: Clone googletest repository")
         if not os.path.isdir("shaderc/third_party/googletest"):
@@ -99,8 +105,8 @@ class Shaderc():
 
         return True
 
-    def build(self):
-        if not self._clone():
+    def build(self, tag="master"):
+        if not self._clone(tag):
             return False
 
         if not self._compile("Debug"):

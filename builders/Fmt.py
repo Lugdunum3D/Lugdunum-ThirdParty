@@ -10,10 +10,16 @@ class Fmt():
         self.args = args
         self.logger = logger
 
-    def _clone(self):
+    def _clone(self, tag):
         self.logger.info("Fmt: Clone main repository")
+
+        repo = None
         if not os.path.isdir("fmt"):
-            Repo.clone_from(Fmt.git_uri, "fmt")
+            repo = Repo.clone_from(Fmt.git_uri, "fmt")
+        else:
+            repo = Repo("fmt")
+
+        repo.git.checkout(tag)
 
         return True
 
@@ -40,8 +46,8 @@ class Fmt():
 
         return True
 
-    def build(self):
-        if not self._clone():
+    def build(self, tag="master"):
+        if not self._clone(tag):
             return False
 
         if not self._copy_files():

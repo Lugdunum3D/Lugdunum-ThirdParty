@@ -12,10 +12,16 @@ class GoogleMock():
         self.args = args
         self.logger = logger
 
-    def _clone(self):
+    def _clone(self, tag):
         self.logger.info("GoogleMock: Clone main repository")
+
+        repo = None
         if not os.path.isdir("googletest"):
-            Repo.clone_from(GoogleMock.git_uri, "googletest")
+            repo = Repo.clone_from(GoogleMock.git_uri, "googletest")
+        else:
+            repo = Repo("googletest")
+
+        repo.git.checkout(tag)
 
         return True
 
@@ -102,8 +108,8 @@ class GoogleMock():
 
         return True
 
-    def build(self):
-        if not self._clone():
+    def build(self, tag="master"):
+        if not self._clone(tag):
             return False
 
         if not self._compile("Debug"):

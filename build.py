@@ -40,7 +40,7 @@ def main():
     logger.info("Build Shaderc")
 
     shaderc_builder = builders.Shaderc(args, logger)
-    if not shaderc_builder.build():
+    if not shaderc_builder.build("dcb30368cdbb91930aee6d86a0fc210f98304bcd"):
         logger.error("Failed to build Shaderc")
         sys.exit(1)
 
@@ -48,7 +48,7 @@ def main():
     logger.info("Build Vulkan")
 
     vulkan_builder = builders.Vulkan(args, logger)
-    if not vulkan_builder.build():
+    if not vulkan_builder.build("685295031d092db5417a5254e4f8b3e8024214cf"):
         logger.error("Failed to build Vulkan")
         sys.exit(1)
 
@@ -56,7 +56,7 @@ def main():
     logger.info("Build Fmt")
 
     fmt_builder = builders.Fmt(args, logger)
-    if not fmt_builder.build():
+    if not fmt_builder.build("07ed4215212324145bee94b94e34656923a4e9b4"):
         logger.error("Failed to build Fmt")
         sys.exit(1)
 
@@ -64,7 +64,7 @@ def main():
     logger.info("Build GoogleMock")
 
     googlemock_builder = builders.GoogleMock(args, logger)
-    if not googlemock_builder.build():
+    if not googlemock_builder.build("294f72bc773c92410aa3c5ecdd6cd4a757c3fbf4"):
         logger.error("Failed to build GoogleMock")
         sys.exit(1)
 
