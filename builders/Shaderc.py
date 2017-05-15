@@ -46,7 +46,6 @@ class Shaderc():
         cmake_args = [
             "cmake",
             "-DSHADERC_ENABLE_SHARED_CRT=ON",
-            "-DENABLE_HLSL=OFF",
             "-DENABLE_GLSLANG_BINARIES=OFF",
             "-DSHADERC_SKIP_TESTS=ON",
             "-DCMAKE_BUILD_TYPE=" + build_type,
