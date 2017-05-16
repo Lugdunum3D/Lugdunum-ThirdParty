@@ -24,7 +24,6 @@ init:
 
 # scripts that run after cloning repository
 install:
-  - git submodule update --init --recursive
   - pip install -r requirements.txt
 
 # to run your custom scripts instead of automatic MSBuild
@@ -33,3 +32,10 @@ build_script:
 
 # to disable deployment
 deploy: off
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+# to disable automatic tests
+test: off
