@@ -36,6 +36,7 @@ class GoogleMock():
         cmake_args = [
             "cmake",
             "-DCMAKE_BUILD_TYPE=" + build_type,
+            "-Dgtest_force_shared_crt=ON",
             "../.."
         ]
 

@@ -56,6 +56,7 @@ class Shaderc():
             "-DSHADERC_SKIP_TESTS=ON",
             "-DCMAKE_BUILD_TYPE=" + build_type,
             "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+            "-DSHADERC_ENABLE_SHARED_CRT=ON",
             "../.."
         ]
 
