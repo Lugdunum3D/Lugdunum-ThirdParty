@@ -1,10 +1,13 @@
 import argparse
-import builders
 import logging
 import os
 import sys
 import yaml
 import zipfile
+
+sys.path.append(os.path.dirname(__file__))
+
+import builders
 
 builder_classes = {
     "fmt": builders.Fmt,

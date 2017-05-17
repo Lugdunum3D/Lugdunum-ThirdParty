@@ -6,7 +6,7 @@ import shutil
 
 from git import Repo
 
-from Builder import Builder
+from .Builder import Builder
 
 # Possible configuration
 #   repository.uri (optional) => The uri of the git repository to clone
@@ -44,7 +44,7 @@ class Gltf2Loader(Builder):
 
         if platform.system() == "Windows":
             cmake_args.append("-G")
-            cmake_args.append("Visual Studio 14 2015 Win64")
+            cmake_args.append("Visual Studio 15 2017 Win64")
 
         if subprocess.Popen(cmake_args, cwd=build_dir).wait():
              return False

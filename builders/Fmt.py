@@ -3,7 +3,7 @@ import shutil
 
 from git import Repo
 
-from Builder import Builder
+from .Builder import Builder
 
 # Possible configuration
 #   repository.uri (optional) => The uri of the git repository to clone
