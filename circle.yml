@@ -7,4 +7,4 @@ dependencies:
 
 test:
   override:
-    - mkdir build && cd build && python ../build.py -vvv
+    - ./ci/circle_build.sh
