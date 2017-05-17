@@ -6,20 +6,24 @@ from git import Repo
 class Fmt():
     git_uri = "https://github.com/fmtlib/fmt.git"
 
-    def __init__(self, args, logger):
+    def __init__(self, args, logger, config):
         self.args = args
         self.logger = logger
+        self.config = config
 
-    def _clone(self, tag):
+        if "uri" not in self.config["repository"]:
+            self.config["repository"]["uri"] = Fmt.git_uri
+
+    def _clone(self):
         self.logger.info("Fmt: Clone main repository")
 
         repo = None
         if not os.path.isdir("fmt"):
-            repo = Repo.clone_from(Fmt.git_uri, "fmt")
+            repo = Repo.clone_from(self.config["repository"]["uri"], "fmt")
         else:
             repo = Repo("fmt")
 
-        repo.git.checkout(tag)
+        repo.git.checkout(self.config["repository"]["tag"])
 
         return True
 
@@ -46,8 +50,8 @@ class Fmt():
 
         return True
 
-    def build(self, tag="master"):
-        if not self._clone(tag):
+    def build(self):
+        if not self._clone():
             return False
 
         if not self._copy_files():

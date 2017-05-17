@@ -8,20 +8,24 @@ from git import Repo
 class Gltf2Loader():
     git_uri = "https://github.com/Lugdunum3D/glTF2-loader.git"
 
-    def __init__(self, args, logger):
+    def __init__(self, args, logger, config):
         self.args = args
         self.logger = logger
+        self.config = config
 
-    def _clone(self, tag):
+        if "uri" not in self.config["repository"]:
+            self.config["repository"]["uri"] = Gltf2Loader.git_uri
+
+    def _clone(self):
         self.logger.info("Gltf2Loader: Clone main repository")
 
         repo = None
         if not os.path.isdir("glTF2-loader"):
-            repo = Repo.clone_from(Gltf2Loader.git_uri, "glTF2-loader")
+            repo = Repo.clone_from(self.config["repository"]["uri"], "glTF2-loader")
         else:
             repo = Repo("glTF2-loader")
 
-        repo.git.checkout(tag)
+        repo.git.checkout(self.config["repository"]["tag"])
 
         return True
 
@@ -90,8 +94,8 @@ class Gltf2Loader():
 
         return True
 
-    def build(self, tag="master"):
-        if not self._clone(tag):
+    def build(self):
+        if not self._clone():
             return False
 
         for build_type in self.args.build_types:

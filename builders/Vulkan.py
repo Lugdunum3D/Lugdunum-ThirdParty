@@ -6,20 +6,24 @@ from git import Repo
 class Vulkan():
     git_uri = "https://github.com/KhronosGroup/Vulkan-Docs.git"
 
-    def __init__(self, args, logger):
+    def __init__(self, args, logger, config):
         self.args = args
         self.logger = logger
+        self.config = config
 
-    def _clone(self, tag):
+        if "uri" not in self.config["repository"]:
+            self.config["repository"]["uri"] = Vulkan.git_uri
+
+    def _clone(self):
         self.logger.info("Vulkan: Clone main repository")
 
         repo = None
         if not os.path.isdir("vulkan"):
-            repo = Repo.clone_from(Vulkan.git_uri, "vulkan")
+            repo = Repo.clone_from(self.config["repository"]["uri"], "vulkan")
         else:
             repo = Repo("vulkan")
 
-        repo.git.checkout(tag)
+        repo.git.checkout(self.config["repository"]["tag"])
 
         return True
 
@@ -41,8 +45,8 @@ class Vulkan():
 
         return True
 
-    def build(self, tag="master"):
-        if not self._clone(tag):
+    def build(self):
+        if not self._clone():
             return False
 
         if not self._copy_files():

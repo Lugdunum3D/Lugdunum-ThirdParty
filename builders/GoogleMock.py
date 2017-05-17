@@ -8,20 +8,24 @@ from git import Repo
 class GoogleMock():
     git_uri = "https://github.com/google/googletest.git"
 
-    def __init__(self, args, logger):
+    def __init__(self, args, logger, config):
         self.args = args
         self.logger = logger
+        self.config = config
 
-    def _clone(self, tag):
+        if "uri" not in self.config["repository"]:
+            self.config["repository"]["uri"] = GoogleMock.git_uri
+
+    def _clone(self):
         self.logger.info("GoogleMock: Clone main repository")
 
         repo = None
         if not os.path.isdir("googletest"):
-            repo = Repo.clone_from(GoogleMock.git_uri, "googletest")
+            repo = Repo.clone_from(self.config["repository"]["uri"], "googletest")
         else:
             repo = Repo("googletest")
 
-        repo.git.checkout(tag)
+        repo.git.checkout(self.config["repository"]["tag"])
 
         return True
 
@@ -102,8 +106,8 @@ class GoogleMock():
 
         return True
 
-    def build(self, tag="master"):
-        if not self._clone(tag):
+    def build(self):
+        if not self._clone():
             return False
 
         for build_type in self.args.build_types:

@@ -8,20 +8,24 @@ from git import Repo
 class Shaderc():
     git_uri = "https://github.com/google/shaderc.git"
 
-    def __init__(self, args, logger):
+    def __init__(self, args, logger, config):
         self.args = args
         self.logger = logger
+        self.config = config
 
-    def _clone(self, tag):
+        if "uri" not in self.config["repository"]:
+            self.config["repository"]["uri"] = Shaderc.git_uri
+
+    def _clone(self):
         self.logger.info("Shaderc: Clone main repository")
 
         repo = None
         if not os.path.isdir("shaderc"):
-            repo = Repo.clone_from(Shaderc.git_uri, "shaderc")
+            repo = Repo.clone_from(self.config["repository"]["uri"], "shaderc")
         else:
             repo = Repo("shaderc")
 
-        repo.git.checkout(tag)
+        repo.git.checkout(self.config["repository"]["tag"])
 
         self.logger.info("Shaderc: Clone googletest repository")
         if not os.path.isdir("shaderc/third_party/googletest"):
@@ -111,8 +115,8 @@ class Shaderc():
 
         return True
 
-    def build(self, tag="master"):
-        if not self._clone(tag):
+    def build(self):
+        if not self._clone():
             return False
 
         for build_type in self.args.build_types:

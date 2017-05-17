@@ -3,6 +3,15 @@ import builders
 import logging
 import os
 import sys
+import yaml
+
+builder_classes = {
+    "fmt": builders.Fmt,
+    "gltf2-loader": builders.Gltf2Loader,
+    "googlemock": builders.GoogleMock,
+    "shaderc": builders.Shaderc,
+    "vulkan": builders.Vulkan,
+}
 
 def main():
     # Parse argument
@@ -15,6 +24,8 @@ def main():
                         action='count', default=0)
     parser.add_argument("--build-types", help='Specify the build types that you want',
                         dest='build_types', nargs='+', type=str, choices=["Debug", "Release"], default=["Debug", "Release"])
+    parser.add_argument("config_file", help='Specify the configuration file to use',
+                        type=str)
 
     args = parser.parse_args()
 
@@ -34,49 +45,24 @@ def main():
 
     logger.setLevel(level=level)
 
-    # Build directory zip
+    # # Build directory zip
     if not os.path.isdir(args.path):
         os.makedirs(args.path)
 
-    # Build shaderc
-    logger.info("Build Shaderc")
+    # Load the configuration file
+    config = None
+    with open(args.config_file) as file:
+        config = yaml.load(file)
 
-    shaderc_builder = builders.Shaderc(args, logger)
-    if not shaderc_builder.build("dcb30368cdbb91930aee6d86a0fc210f98304bcd"):
-        logger.error("Failed to build Shaderc")
-        sys.exit(1)
+    for builder_name in config:
+        if builder_name not in builder_classes:
+            logger.error("Can't find builder for '%s'", builder_name)
+            sys.exit(1)
 
-    # Build vulkan
-    logger.info("Build Vulkan")
-
-    vulkan_builder = builders.Vulkan(args, logger)
-    if not vulkan_builder.build("685295031d092db5417a5254e4f8b3e8024214cf"):
-        logger.error("Failed to build Vulkan")
-        sys.exit(1)
-
-    # Build fmt
-    logger.info("Build Fmt")
-
-    fmt_builder = builders.Fmt(args, logger)
-    if not fmt_builder.build("07ed4215212324145bee94b94e34656923a4e9b4"):
-        logger.error("Failed to build Fmt")
-        sys.exit(1)
-
-    # Build googlemock
-    logger.info("Build GoogleMock")
-
-    googlemock_builder = builders.GoogleMock(args, logger)
-    if not googlemock_builder.build("294f72bc773c92410aa3c5ecdd6cd4a757c3fbf4"):
-        logger.error("Failed to build GoogleMock")
-        sys.exit(1)
-
-    # Build gltf2-loader
-    logger.info("Build Gltf2Loader")
-
-    gltf2_loader_builder = builders.Gltf2Loader(args, logger)
-    if not gltf2_loader_builder.build("af5c74f82d2a563d4f659aebd91c27c8143edf9d"):
-        logger.error("Failed to build Gltf2Loader")
-        sys.exit(1)
+        builder = builder_classes[builder_name](args, logger, config[builder_name])
+        if not builder.build():
+            logger.error("Failed to build for builder '%s'", builder_name)
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
