@@ -1,3 +1,4 @@
+import glob
 import os
 import subprocess
 import platform
@@ -99,6 +100,15 @@ class GoogleMock(Builder):
                 shutil.copy("googletest/build/" + build_type + "/googlemock/gtest/" + build_type + "/gtest_main.lib", os.path.join(googlemock_library_path, "gtest_main" + suffix + ".lib"))
                 shutil.copy("googletest/build/" + build_type + "/googlemock/" + build_type + "/gmock.lib", os.path.join(googlemock_library_path, "gmock" + suffix + ".lib"))
                 shutil.copy("googletest/build/" + build_type + "/googlemock/" + build_type + "/gmock_main.lib", os.path.join(googlemock_library_path, "gmock_main" + suffix + ".lib"))
+
+                if build_type == "Debug":
+                    self.logger.info("GoogleMock: Copy pdb files")
+
+                    for file in glob.glob("googletest/build/" + build_type + "/googlemock/gtest/" + build_type + "/*.pdb"):
+                        shutil.copy(file, googlemock_library_path)
+
+                    for file in glob.glob("googletest/build/" + build_type + "/googlemock/" + build_type + "/*.pdb"):
+                        shutil.copy(file, googlemock_library_path)
             else:
                 return False
 

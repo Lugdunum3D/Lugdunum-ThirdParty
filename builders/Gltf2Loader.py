@@ -1,3 +1,4 @@
+import glob
 import os
 import subprocess
 import platform
@@ -87,6 +88,11 @@ class Gltf2Loader(Builder):
                 shutil.copy("glTF2-loader/build/" + build_type + "/libgltf2-loader" + suffix + ".a", os.path.join(gltf2_loader_library_path, "libgltf2-loader" + suffix + ".a"))
             elif platform.system() == "Windows":
                 shutil.copy("glTF2-loader/build/" + build_type + "/" + build_type + "/gltf2-loader" + suffix + ".lib", os.path.join(gltf2_loader_library_path, "gltf2-loader" + suffix + ".lib"))
+
+                if build_type == "Debug":
+                    self.logger.info("Gltf2Loader: Copy pdb files")
+                    for file in glob.glob("glTF2-loader/build/" + build_type + "/" + build_type + "/*.pdb"):
+                        shutil.copy(file, gltf2_loader_library_path)
             else:
                 return False
 

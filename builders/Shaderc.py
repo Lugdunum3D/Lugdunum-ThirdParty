@@ -1,3 +1,4 @@
+import glob
 import os
 import subprocess
 import platform
@@ -108,6 +109,11 @@ class Shaderc(Builder):
                 shutil.copy("shaderc/build/" + build_type + "/libshaderc/libshaderc_combined.a", os.path.join(shaderc_library_path, "libshaderc_combined" + suffix + ".a"))
             elif platform.system() == "Windows":
                 shutil.copy("shaderc/build/" + build_type + "/libshaderc/" + build_type + "/shaderc_combined.lib", os.path.join(shaderc_library_path, "shaderc_combined" + suffix + ".lib"))
+
+                if build_type == "Debug":
+                    self.logger.info("Shaderc: Copy pdb files")
+                    for file in glob.glob("shaderc/build/" + build_type + "/libshaderc/" + build_type + "/*.pdb"):
+                        shutil.copy(file, shaderc_library_path)
             else:
                 return False
 
