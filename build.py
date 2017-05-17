@@ -10,27 +10,27 @@ sys.path.append(os.path.dirname(__file__))
 import builders
 
 builder_classes = {
-    "fmt": builders.Fmt,
-    "gltf2-loader": builders.Gltf2Loader,
-    "googlemock": builders.GoogleMock,
-    "shaderc": builders.Shaderc,
-    "vulkan": builders.Vulkan,
+    'fmt': builders.Fmt,
+    'gltf2-loader': builders.Gltf2Loader,
+    'googlemock': builders.GoogleMock,
+    'shaderc': builders.Shaderc,
+    'vulkan': builders.Vulkan,
 }
 
 def main():
     # Parse argument
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--path", "-p", help='Specify the destination directory',
-                        dest='path', default="thirdparty")
+    parser.add_argument('--path', '-p', help='Specify the destination directory',
+                        dest='path', default='thirdparty')
     parser.add_argument('-v', '--verbose', help='Enables verbose output; '
                         'repeat up to three time for more verbose output',
                         action='count', default=0)
-    parser.add_argument("--build-types", help='Specify the build types that you want',
-                        dest='build_types', nargs='+', type=str, choices=["Debug", "Release"], default=["Debug", "Release"])
-    parser.add_argument("--zip-file", "-z", help='Specify the zip file, if not specified will not generate a zip',
+    parser.add_argument('--build-types', help='Specify the build types that you want',
+                        dest='build_types', nargs='+', type=str, choices=['Debug', 'Release'], default=['Debug', 'Release'])
+    parser.add_argument('--zip-file', '-z', help='Specify the zip file, if not specified will not generate a zip',
                         dest='zip_file')
-    parser.add_argument("config_file", help='Specify the configuration file to use',
+    parser.add_argument('config_file', help='Specify the configuration file to use',
                         type=str)
 
     args = parser.parse_args()
@@ -52,7 +52,7 @@ def main():
 
     logger.setLevel(level=level)
 
-    # # Build directory zip
+    # Build directory zip
     if not os.path.isdir(args.path):
         os.makedirs(args.path)
 
@@ -64,17 +64,17 @@ def main():
     # For each builders in the config file, build
     for builder_name in config:
         if builder_name not in builder_classes:
-            logger.error("Can't find builder for '%s'", builder_name)
+            logger.error('Can\'t find builder for "%s"', builder_name)
             sys.exit(1)
 
         builder = builder_classes[builder_name](args, logger, config[builder_name])
         if not builder.build():
-            logger.error("Failed to build for builder '%s'", builder_name)
+            logger.error('Failed to build for builder "%s"', builder_name)
             sys.exit(1)
 
     # Generate zip
     if args.zip_file:
-        logger.info("Generating the zip file '%s'", args.zip_file)
+        logger.info('Generating the zip file "%s"', args.zip_file)
 
         zipf = zipfile.ZipFile(args.zip_file, 'w', zipfile.ZIP_DEFLATED)
 
@@ -85,5 +85,5 @@ def main():
 
         zipf.close()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

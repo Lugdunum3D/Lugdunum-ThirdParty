@@ -10,40 +10,40 @@ from .Builder import Builder
 #   repository.tag (mandatory) => The tag to checkout to before building
 
 class Fmt(Builder):
-    default_repository_uri = "https://github.com/fmtlib/fmt.git"
+    default_repository_uri = 'https://github.com/fmtlib/fmt.git'
 
     def _clone(self):
-        self.logger.info("Fmt: Clone main repository")
+        self.logger.info('Fmt: Clone main repository')
 
         repo = None
-        if not os.path.isdir("fmt"):
-            repo = Repo.clone_from(self.config["repository"]["uri"], "fmt")
+        if not os.path.isdir('fmt'):
+            repo = Repo.clone_from(self.config['repository']['uri'], 'fmt')
         else:
-            repo = Repo("fmt")
+            repo = Repo('fmt')
 
-        repo.git.checkout(self.config["repository"]["tag"])
+        repo.git.checkout(self.config['repository']['tag'])
 
         return True
 
     def _copy_files(self):
-        fmt_root_path = os.path.join(self.args.path, "fmt")
-        fmt_include_path = os.path.join(fmt_root_path, "include")
+        fmt_root_path = os.path.join(self.args.path, 'fmt')
+        fmt_include_path = os.path.join(fmt_root_path, 'include')
 
-        self.logger.info("Fmt: Create directories")
+        self.logger.info('Fmt: Create directories')
 
         if not os.path.isdir(fmt_include_path):
             os.makedirs(fmt_include_path)
 
-        self.logger.info("Fmt: Copy license file")
+        self.logger.info('Fmt: Copy license file')
 
-        shutil.copy("fmt/LICENSE.rst", fmt_root_path)
+        shutil.copy('fmt/LICENSE.rst', fmt_root_path)
 
-        self.logger.info("Fmt: Copy include files")
+        self.logger.info('Fmt: Copy include files')
 
-        real_include_path = os.path.join(fmt_include_path, "fmt")
+        real_include_path = os.path.join(fmt_include_path, 'fmt')
 
         if not os.path.isdir(real_include_path):
-            shutil.copytree("fmt/fmt", real_include_path)
-            os.remove(os.path.join(real_include_path, "CMakeLists.txt"))
+            shutil.copytree('fmt/fmt', real_include_path)
+            os.remove(os.path.join(real_include_path, 'CMakeLists.txt'))
 
         return True

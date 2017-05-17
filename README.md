@@ -9,7 +9,7 @@ pip install -r requirements.txt
 
 # Build
 
-You need to specify a yml configuration file to build the libraries similar to this one:
+You need to specify a yaml configuration file to build the libraries similar to this one:
 
 ```yml
 shaderc:
@@ -33,7 +33,7 @@ gltf2-loader:
         tag: af5c74f82d2a563d4f659aebd91c27c8143edf9d
 ```
 
-The value for each `builder` is the configuration send to it and is dependent of the `builder`, see each python file in the directory `builders/` to check the avalaible configuration for each one. The key `repository.tag` is mandatory, you can also specify the key `repository.uri` to specify which Git repository you want to use.
+The value for each `builder` is the configuration sent to it and is dependent of the `builder`, see each python file in the directory `builders/` to check the avalaible configuration for each one. The key `repository.tag` is mandatory, you can also specify the key `repository.uri` to specify which git repository you want to use.
 
 The python script `build.py` will use this configuration file to build an arborescence in the directory specified with the option `--path` (`thirdparty` by default).
 

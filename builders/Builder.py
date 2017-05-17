@@ -4,8 +4,8 @@ class Builder():
         self.logger = logger
         self.config = config
 
-        if "uri" not in self.config["repository"]:
-            self.config["repository"]["uri"] = self.default_repository_uri
+        if 'uri' not in self.config['repository']:
+            self.config['repository']['uri'] = self.default_repository_uri
 
     def _compile(self, build_type):
         return True
