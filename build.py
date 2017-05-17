@@ -4,6 +4,7 @@ import logging
 import os
 import sys
 import yaml
+import zipfile
 
 builder_classes = {
     "fmt": builders.Fmt,
@@ -24,10 +25,13 @@ def main():
                         action='count', default=0)
     parser.add_argument("--build-types", help='Specify the build types that you want',
                         dest='build_types', nargs='+', type=str, choices=["Debug", "Release"], default=["Debug", "Release"])
+    parser.add_argument("--zip-file", "-z", help='Specify the zip file, if not specified will not generate a zip',
+                        dest='zip_file')
     parser.add_argument("config_file", help='Specify the configuration file to use',
                         type=str)
 
     args = parser.parse_args()
+    args.path = os.path.abspath(args.path)
 
     # Define the logger
     logger = logging.getLogger()
@@ -64,6 +68,19 @@ def main():
         if not builder.build():
             logger.error("Failed to build for builder '%s'", builder_name)
             sys.exit(1)
+
+    # Generate zip
+    if args.zip_file:
+        logger.info("Generating the zip file '%s'", args.zip_file)
+
+        zipf = zipfile.ZipFile(args.zip_file, 'w', zipfile.ZIP_DEFLATED)
+
+        for root, dirs, files in os.walk(args.path):
+            for file in files:
+                filepath = os.path.abspath(os.path.join(root, file))
+                zipf.write(filepath, os.path.relpath(filepath, args.path))
+
+        zipf.close()
 
 if __name__ == "__main__":
     main()
