@@ -5,16 +5,14 @@ import shutil
 
 from git import Repo
 
-class GoogleMock():
-    git_uri = "https://github.com/google/googletest.git"
+from Builder import Builder
 
-    def __init__(self, args, logger, config):
-        self.args = args
-        self.logger = logger
-        self.config = config
+# Possible configuration
+#   repository.uri (optional) => The uri of the git repository to clone
+#   repository.tag (mandatory) => The tag to checkout to before building
 
-        if "uri" not in self.config["repository"]:
-            self.config["repository"]["uri"] = GoogleMock.git_uri
+class GoogleMock(Builder):
+    default_repository_uri = "https://github.com/google/googletest.git"
 
     def _clone(self):
         self.logger.info("GoogleMock: Clone main repository")
@@ -103,18 +101,5 @@ class GoogleMock():
                 shutil.copy("googletest/build/" + build_type + "/googlemock/" + build_type + "/gmock_main.lib", os.path.join(googlemock_library_path, "gmock_main" + suffix + ".lib"))
             else:
                 return False
-
-        return True
-
-    def build(self):
-        if not self._clone():
-            return False
-
-        for build_type in self.args.build_types:
-            if not self._compile(build_type):
-                return False
-
-        if not self._copy_files():
-            return False
 
         return True

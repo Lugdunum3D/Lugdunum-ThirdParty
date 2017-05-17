@@ -54,6 +54,7 @@ def main():
     with open(args.config_file) as file:
         config = yaml.load(file)
 
+    # For each builders in the config file, build
     for builder_name in config:
         if builder_name not in builder_classes:
             logger.error("Can't find builder for '%s'", builder_name)

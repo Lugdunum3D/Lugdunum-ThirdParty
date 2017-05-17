@@ -5,16 +5,14 @@ import shutil
 
 from git import Repo
 
-class Shaderc():
-    git_uri = "https://github.com/google/shaderc.git"
+from Builder import Builder
 
-    def __init__(self, args, logger, config):
-        self.args = args
-        self.logger = logger
-        self.config = config
+# Possible configuration
+#   repository.uri (optional) => The uri of the git repository to clone
+#   repository.tag (mandatory) => The tag to checkout to before building
 
-        if "uri" not in self.config["repository"]:
-            self.config["repository"]["uri"] = Shaderc.git_uri
+class Shaderc(Builder):
+    default_repository_uri = "https://github.com/google/shaderc.git"
 
     def _clone(self):
         self.logger.info("Shaderc: Clone main repository")
@@ -112,18 +110,5 @@ class Shaderc():
                 shutil.copy("shaderc/build/" + build_type + "/libshaderc/" + build_type + "/shaderc_combined.lib", os.path.join(shaderc_library_path, "shaderc_combined" + suffix + ".lib"))
             else:
                 return False
-
-        return True
-
-    def build(self):
-        if not self._clone():
-            return False
-
-        for build_type in self.args.build_types:
-            if not self._compile(build_type):
-                return False
-
-        if not self._copy_files():
-            return False
 
         return True

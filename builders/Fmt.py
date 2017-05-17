@@ -3,16 +3,14 @@ import shutil
 
 from git import Repo
 
-class Fmt():
-    git_uri = "https://github.com/fmtlib/fmt.git"
+from Builder import Builder
 
-    def __init__(self, args, logger, config):
-        self.args = args
-        self.logger = logger
-        self.config = config
+# Possible configuration
+#   repository.uri (optional) => The uri of the git repository to clone
+#   repository.tag (mandatory) => The tag to checkout to before building
 
-        if "uri" not in self.config["repository"]:
-            self.config["repository"]["uri"] = Fmt.git_uri
+class Fmt(Builder):
+    default_repository_uri = "https://github.com/fmtlib/fmt.git"
 
     def _clone(self):
         self.logger.info("Fmt: Clone main repository")
@@ -47,14 +45,5 @@ class Fmt():
         if not os.path.isdir(real_include_path):
             shutil.copytree("fmt/fmt", real_include_path)
             os.remove(os.path.join(real_include_path, "CMakeLists.txt"))
-
-        return True
-
-    def build(self):
-        if not self._clone():
-            return False
-
-        if not self._copy_files():
-            return False
 
         return True

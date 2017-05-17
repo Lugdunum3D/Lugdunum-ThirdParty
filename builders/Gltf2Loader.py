@@ -5,16 +5,14 @@ import shutil
 
 from git import Repo
 
-class Gltf2Loader():
-    git_uri = "https://github.com/Lugdunum3D/glTF2-loader.git"
+from Builder import Builder
 
-    def __init__(self, args, logger, config):
-        self.args = args
-        self.logger = logger
-        self.config = config
+# Possible configuration
+#   repository.uri (optional) => The uri of the git repository to clone
+#   repository.tag (mandatory) => The tag to checkout to before building
 
-        if "uri" not in self.config["repository"]:
-            self.config["repository"]["uri"] = Gltf2Loader.git_uri
+class Gltf2Loader(Builder):
+    default_repository_uri = "https://github.com/Lugdunum3D/glTF2-loader.git"
 
     def _clone(self):
         self.logger.info("Gltf2Loader: Clone main repository")
@@ -91,18 +89,5 @@ class Gltf2Loader():
                 shutil.copy("glTF2-loader/build/" + build_type + "/" + build_type + "/gltf2-loader" + suffix + ".lib", os.path.join(gltf2_loader_library_path, "gltf2-loader" + suffix + ".lib"))
             else:
                 return False
-
-        return True
-
-    def build(self):
-        if not self._clone():
-            return False
-
-        for build_type in self.args.build_types:
-            if not self._compile(build_type):
-                return False
-
-        if not self._copy_files():
-            return False
 
         return True

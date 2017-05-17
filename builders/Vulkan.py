@@ -3,16 +3,14 @@ import shutil
 
 from git import Repo
 
-class Vulkan():
-    git_uri = "https://github.com/KhronosGroup/Vulkan-Docs.git"
+from Builder import Builder
 
-    def __init__(self, args, logger, config):
-        self.args = args
-        self.logger = logger
-        self.config = config
+# Possible configuration
+#   repository.uri (optional) => The uri of the git repository to clone
+#   repository.tag (mandatory) => The tag to checkout to before building
 
-        if "uri" not in self.config["repository"]:
-            self.config["repository"]["uri"] = Vulkan.git_uri
+class Vulkan(Builder):
+    default_repository_uri = "https://github.com/KhronosGroup/Vulkan-Docs.git"
 
     def _clone(self):
         self.logger.info("Vulkan: Clone main repository")
@@ -42,14 +40,5 @@ class Vulkan():
 
         if not os.path.isdir(real_include_path):
             shutil.copytree("vulkan/src/vulkan", real_include_path)
-
-        return True
-
-    def build(self):
-        if not self._clone():
-            return False
-
-        if not self._copy_files():
-            return False
 
         return True
