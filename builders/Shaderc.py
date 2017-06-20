@@ -24,6 +24,7 @@ class Shaderc(Builder):
         else:
             repo = Repo('shaderc')
 
+        repo.remotes['origin'].fetch(self.config['repository']['tag'])
         repo.git.checkout(self.config['repository']['tag'])
 
         self.logger.info('Shaderc: Clone googletest repository')
