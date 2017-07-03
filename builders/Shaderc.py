@@ -27,21 +27,27 @@ class Shaderc(Builder):
         repo.remotes['origin'].fetch(self.config['repository']['tag'])
         repo.git.checkout(self.config['repository']['tag'])
 
+        # TODO: Use tag and repo in the yml
+
         self.logger.info('Shaderc: Clone googletest repository')
         if not os.path.isdir('shaderc/third_party/googletest'):
-            Repo.clone_from('https://github.com/google/googletest.git', 'shaderc/third_party/googletest')
+            repo_gtest = Repo.clone_from('https://github.com/google/googletest.git', 'shaderc/third_party/googletest')
+            repo_gtest.git.checkout("c2d90bddc6a2a562ee7750c14351e9ca16a6a37a")
 
         self.logger.info('Shaderc: Clone glslang repository')
         if not os.path.isdir('shaderc/third_party/glslang'):
-            Repo.clone_from('https://github.com/google/glslang.git', 'shaderc/third_party/glslang')
+            repo_glslang = Repo.clone_from('https://github.com/google/glslang.git', 'shaderc/third_party/glslang')
+            repo_glslang.git.checkout("91c46c656720a6e1e71a3411cd1f4f792b427b2d")
 
         self.logger.info('Shaderc: Clone spirv-tools repository')
         if not os.path.isdir('shaderc/third_party/spirv-tools'):
-            Repo.clone_from('https://github.com/KhronosGroup/SPIRV-Tools.git', 'shaderc/third_party/spirv-tools')
+            repo_spirv_tools = Repo.clone_from('https://github.com/KhronosGroup/SPIRV-Tools.git', 'shaderc/third_party/spirv-tools')
+            repo_spirv_tools.git.checkout("7c8da66bc27cc5c4ccb6a0fa612f56c9417518ff")
 
         self.logger.info('Shaderc: Clone spirv-headers repository')
         if not os.path.isdir('shaderc/third_party/spirv-tools/external/spirv-headers'):
-            Repo.clone_from('https://github.com/KhronosGroup/SPIRV-Headers.git', 'shaderc/third_party/spirv-tools/external/spirv-headers')
+            repo_spirv_headers = Repo.clone_from('https://github.com/KhronosGroup/SPIRV-Headers.git', 'shaderc/third_party/spirv-tools/external/spirv-headers')
+            repo_spirv_headers.git.checkout("63e1062a194750b354d48be8c16750d7a4d0dc4e")
 
         return True
 
