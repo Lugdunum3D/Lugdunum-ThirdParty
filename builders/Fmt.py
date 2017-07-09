@@ -21,7 +21,7 @@ class Fmt(Builder):
         else:
             repo = Repo('fmt')
 
-        repo.remotes['origin'].fetch(self.config['repository']['tag'])
+        repo.remotes['origin'].fetch()
         repo.git.checkout(self.config['repository']['tag'])
 
         return True

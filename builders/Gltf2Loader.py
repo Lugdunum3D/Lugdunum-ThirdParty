@@ -24,7 +24,7 @@ class Gltf2Loader(Builder):
         else:
             repo = Repo('glTF2-loader')
 
-        repo.remotes['origin'].fetch(self.config['repository']['tag'])
+        repo.remotes['origin'].fetch()
         repo.git.checkout(self.config['repository']['tag'])
 
         return True

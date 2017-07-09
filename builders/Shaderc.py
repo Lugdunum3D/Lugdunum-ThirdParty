@@ -24,7 +24,7 @@ class Shaderc(Builder):
         else:
             repo = Repo('shaderc')
 
-        repo.remotes['origin'].fetch(self.config['repository']['tag'])
+        repo.remotes['origin'].fetch()
         repo.git.checkout(self.config['repository']['tag'])
 
         # TODO: Use tag and repo in the yml

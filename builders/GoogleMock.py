@@ -24,7 +24,7 @@ class GoogleMock(Builder):
         else:
             repo = Repo('googletest')
 
-        repo.remotes['origin'].fetch(self.config['repository']['tag'])
+        repo.remotes['origin'].fetch()
         repo.git.checkout(self.config['repository']['tag'])
 
         return True
