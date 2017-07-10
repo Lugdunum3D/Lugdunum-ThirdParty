@@ -15,6 +15,7 @@ builder_classes = {
     'googlemock': builders.GoogleMock,
     'shaderc': builders.Shaderc,
     'vulkan': builders.Vulkan,
+    'imgui': builders.Imgui
 }
 
 def main():
