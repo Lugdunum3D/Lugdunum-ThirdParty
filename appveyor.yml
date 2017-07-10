@@ -33,7 +33,7 @@ before_build:
       cd ..
       git clone https://github.com/Lugdunum3D/Lugdunum.git
       cd Lugdunum
-      git checkout feature-gltf-integration-loader
+      git checkout dev
       cd ../Lugdunum-ThirdParty
 
 # to run your custom scripts instead of automatic MSBuild
