@@ -74,7 +74,7 @@ class Shaderc(Builder):
             cmake_args += ['-G', 'Visual Studio 15 2017 Win64']
 
         if self.build_android:
-            cmake_args[0] = os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.3155560/bin/cmake'
+            cmake_args[0] = os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.4111459/bin/cmake'
             cmake_args += ['-G', 'Android Gradle - Unix Makefiles']
             cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=%s' % os.environ.get("ANDROID_SDK_ROOT") + '/ndk-bundle/build/cmake/android.toolchain.cmake']
             cmake_args += ['-DANDROID_PLATFORM=android-24']
@@ -86,7 +86,7 @@ class Shaderc(Builder):
 
         self.logger.info('Shaderc: Build for %s', build_type)
         if self.build_android:
-            if subprocess.Popen([os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.3155560/bin/cmake', '--build', '.', '--config', build_type], cwd=build_dir).wait():
+            if subprocess.Popen([os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.4111459/bin/cmake', '--build', '.', '--config', build_type], cwd=build_dir).wait():
                 return False
         else:
             if subprocess.Popen(['cmake', '--build', '.', '--config', build_type], cwd=build_dir).wait():
