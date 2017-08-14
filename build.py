@@ -33,6 +33,8 @@ def main():
                         dest='zip_file')
     parser.add_argument('config_file', help='Specify the configuration file to use',
                         type=str)
+    parser.add_argument('--android', help='Compiling for Android',
+                        type=bool, dest='android', default=False)
 
     args = parser.parse_args()
     args.path = os.path.abspath(args.path)
@@ -62,13 +64,18 @@ def main():
     with open(args.config_file) as file:
         config = yaml.load(file)
 
+    if args.android:
+        if not os.environ.get("ANDROID_SDK_ROOT"):
+            logger.error('Can\'t find ANDROID_SDK_ROOT environment variable')
+            sys.exit(1)
+
     # For each builders in the config file, build
     for builder_name in config:
         if builder_name not in builder_classes:
             logger.error('Can\'t find builder for "%s"', builder_name)
             sys.exit(1)
 
-        builder = builder_classes[builder_name](args, logger, config[builder_name])
+        builder = builder_classes[builder_name](args, logger, config[builder_name], args.android)
         if not builder.build():
             logger.error('Failed to build for builder "%s"', builder_name)
             sys.exit(1)

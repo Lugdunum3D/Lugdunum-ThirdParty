@@ -46,6 +46,14 @@ class Gltf2Loader(Builder):
         if platform.system() == 'Windows':
             cmake_args += ['-G', 'Visual Studio 15 2017 Win64']
 
+        if self.build_android:
+            cmake_args[0] = os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.4111459/bin/cmake'
+            cmake_args += ['-G', 'Android Gradle - Unix Makefiles']
+            cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=%s' % os.environ.get("ANDROID_SDK_ROOT") + '/ndk-bundle/build/cmake/android.toolchain.cmake']
+            cmake_args += ['-DANDROID_PLATFORM=android-24']
+            cmake_args += ['-DANDROID_ABI=arm64-v8a']
+            cmake_args += ['-DANDROID_STL=c++_shared']
+
         if subprocess.Popen(cmake_args, cwd=build_dir).wait():
              return False
 
@@ -84,7 +92,7 @@ class Gltf2Loader(Builder):
 
             suffix = '-d' if build_type == 'Debug' else ''
 
-            if platform.system() == 'Linux':
+            if self.build_android or platform.system() == 'Linux':
                 shutil.copy(os.path.join('glTF2-loader/build', build_type, 'libgltf2-loader' + suffix + '.a'),              os.path.join(gltf2_loader_library_path, 'libgltf2-loader' + suffix + '.a'))
             elif platform.system() == 'Windows':
                 shutil.copy(os.path.join('glTF2-loader/build', build_type, build_type, 'gltf2-loader' + suffix + '.lib'),   os.path.join(gltf2_loader_library_path, 'gltf2-loader' + suffix + '.lib'))
