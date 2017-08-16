@@ -15,7 +15,10 @@ builder_classes = {
     'googlemock': builders.GoogleMock,
     'shaderc': builders.Shaderc,
     'vulkan': builders.Vulkan,
-    'imgui': builders.Imgui
+    'imgui': builders.Imgui,
+    'json': builders.Json,
+    'curl': builders.Curl,
+    'restclient': builders.Restclient
 }
 
 def main():
