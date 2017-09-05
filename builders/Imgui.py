@@ -41,7 +41,7 @@ class Imgui(Builder):
 
         self.logger.info('Imgui: Copy license file')
 
-        shutil.copy('imgui/LICENSE', imgui_root_path)
+        shutil.copy('imgui/LICENSE.txt', imgui_root_path)
 
         self.logger.info('Imgui: Copy include files')
 
