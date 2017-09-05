@@ -18,7 +18,8 @@ builder_classes = {
     'imgui': builders.Imgui,
     'json': builders.Json,
     'curl': builders.Curl,
-    'restclient': builders.Restclient
+    'restclient': builders.Restclient,
+    'freetype': builders.Freetype
 }
 
 def main():
