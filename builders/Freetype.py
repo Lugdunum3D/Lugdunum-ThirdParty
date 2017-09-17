@@ -97,7 +97,7 @@ class Freetype(Builder):
             if self.build_android or platform.system() == 'Linux':
                 shutil.copy(os.path.join('freetype/build', build_type, 'libfreetype' + original_suffix + '.a'),              os.path.join(freetype_library_path, 'libfreetype' + suffix + '.a'))
             elif platform.system() == 'Windows':
-                shutil.copy(os.path.join('freetype/build', build_type, build_type, 'freetype' + original_suffix + '.lib'),   os.path.join(freetype_library_path, 'freetype' + suffix + '.lib'))
+                shutil.copy(os.path.join('freetype/build', build_type, build_type, 'freetype' + original_suffix + '.lib'),   os.path.join(freetype_library_path, 'freetype' + original_suffix + '.lib'))
 
                 if build_type == 'Debug':
                     self.logger.info('Freetype: Copy pdb files')
