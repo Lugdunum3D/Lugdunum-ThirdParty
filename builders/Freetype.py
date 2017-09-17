@@ -74,8 +74,8 @@ class Freetype(Builder):
 
         self.logger.info('Freetype: Create directories')
 
-        if not os.path.isdir(freetype_include_path):
-            os.makedirs(freetype_include_path)
+        if os.path.exists(freetype_include_path):
+                shutil.rmtree(freetype_include_path)
 
         if not os.path.isdir(freetype_library_path):
             os.makedirs(freetype_library_path)
@@ -86,10 +86,7 @@ class Freetype(Builder):
 
         self.logger.info('Freetype: Copy include files')
 
-        real_include_path = os.path.join(freetype_include_path, 'freetype')
-
-        if not os.path.isdir(real_include_path):
-            shutil.copytree('freetype/include', real_include_path)
+        shutil.copytree('freetype/include', freetype_include_path)
 
         for build_type in self.args.build_types:
             self.logger.info('Freetype: Copy libraries for %s', build_type)
