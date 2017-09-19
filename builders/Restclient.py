@@ -78,7 +78,7 @@ class Restclient(Builder):
 
         self.logger.info('Restclient: Copy include files')
 
-        real_include_path = os.path.join(restclient_loader_include_path, 'restclient')
+        real_include_path = os.path.join(restclient_loader_include_path, 'restclient-cpp')
 
         if not os.path.isdir(real_include_path):
             shutil.copytree('restclient/include/restclient-cpp', real_include_path)
