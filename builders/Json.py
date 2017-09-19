@@ -10,7 +10,7 @@ from .Builder import Builder
 #   repository.tag (mandatory) => The tag to checkout to before building
 
 class Json(Builder):
-    default_repository_uri = 'https://github.com/nlohmann/json.git'
+    default_repository_uri = 'https://github.com/Lugdunum3D/json.git'
 
     def _clone(self):
         self.logger.info('json: Clone main repository')
