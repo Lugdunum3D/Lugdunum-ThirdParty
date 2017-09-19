@@ -13,7 +13,7 @@ from .Builder import Builder
 #   repository.tag (mandatory) => The tag to checkout to before building
 
 class Curl(Builder):
-    default_repository_uri = 'https://github.com/curl/curl.git'
+    default_repository_uri = 'https://github.com/Lugdunum3D/curl.git'
 
     def _clone(self):
         self.logger.info('Curl: Clone main repository')
@@ -50,8 +50,12 @@ class Curl(Builder):
              return False
 
         self.logger.info('Curl: Build for %s', build_type)
-        if subprocess.Popen(['cmake', '--build', '.', '--config', build_type], cwd=build_dir).wait():
-             return False
+        if platform.system() == 'Windows':
+            if subprocess.Popen(['cmake', '--build', '.', '--target', 'curl', '--config', build_type], cwd=build_dir).wait():
+                 return False
+        else:
+            if subprocess.Popen(['cmake', '--build', '.', '--config', build_type], cwd=build_dir).wait():
+                 return False
 
         return True
 
