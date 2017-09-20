@@ -13,7 +13,7 @@ from .Builder import Builder
 #   repository.tag (mandatory) => The tag to checkout to before building
 
 class Restclient(Builder):
-    default_repository_uri = 'https://github.com/Lugdunum3D/restclient-cpp.git'
+    default_repository_uri = 'https://github.com/mrtazz/restclient-cpp.git'
 
     def _clone(self):
         self.logger.info('Restclient: Clone main repository')
