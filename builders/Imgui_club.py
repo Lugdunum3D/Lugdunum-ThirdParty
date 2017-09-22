@@ -10,8 +10,8 @@ from .Builder import Builder
 #   repository.tag (mandatory) => The tag to checkout to before building
 
 class Imgui_club(Builder):
-
     default_repository_uri = 'https://github.com/ocornut/Imgui_club.git'
+
     def _clone(self):
         self.logger.info('Imgui_club: Clone main repository')
 
@@ -21,7 +21,7 @@ class Imgui_club(Builder):
         else:
             repo = Repo('imgui_club')
 
-        repo.remotes['origin'].fetch(self.config['repository']['tag'])
+        repo.remotes['origin'].fetch()
         repo.git.checkout(self.config['repository']['tag'])
 
         return True
