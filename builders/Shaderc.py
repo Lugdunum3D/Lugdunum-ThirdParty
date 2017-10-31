@@ -61,11 +61,11 @@ class Shaderc(Builder):
 
         cmake_args = [
             'cmake',
+            '-DCMAKE_BUILD_TYPE=' + build_type,
+            '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
             '-DSHADERC_ENABLE_SHARED_CRT=ON',
             '-DENABLE_GLSLANG_BINARIES=OFF',
             '-DSHADERC_SKIP_TESTS=ON',
-            '-DCMAKE_BUILD_TYPE=' + build_type,
-            '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
             '-DSHADERC_ENABLE_SHARED_CRT=ON',
             '../..'
         ]

@@ -43,6 +43,7 @@ class Restclient(Builder):
         cmake_args = [
             'cmake',
             '-DCMAKE_BUILD_TYPE=' + build_type,
+            '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
             '-DCMAKE_PREFIX_PATH=' + os.path.join(os.path.dirname(os.path.realpath(__file__))) + "../../thirdparty/curl",
             '../..'
         ]

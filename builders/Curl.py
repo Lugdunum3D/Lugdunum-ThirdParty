@@ -40,6 +40,7 @@ class Curl(Builder):
         cmake_args = [
             'cmake',
             '-DCMAKE_BUILD_TYPE=' + build_type,
+            '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
             '../..'
         ]
 

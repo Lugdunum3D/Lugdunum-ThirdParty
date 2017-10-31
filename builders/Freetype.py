@@ -40,6 +40,7 @@ class Freetype(Builder):
         cmake_args = [
             'cmake',
             '-DCMAKE_BUILD_TYPE=' + build_type,
+            '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
             '-DWITH_ZLIB=OFF',
             '-DWITH_HarfBuzz=OFF',
             '-DWITH_BZip2=OFF',
