@@ -72,6 +72,8 @@ class Shaderc(Builder):
 
         if platform.system() == 'Windows':
             cmake_args += ['-G', 'Visual Studio 15 2017 Win64']
+        if platform.system() == 'Linux':
+            cmake_args += ['-G', 'Ninja']
 
         if self.build_android:
             cmake_args[0] = os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.4111459/bin/cmake'

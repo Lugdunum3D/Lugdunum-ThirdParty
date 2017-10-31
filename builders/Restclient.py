@@ -49,6 +49,8 @@ class Restclient(Builder):
 
         if platform.system() == 'Windows':
             cmake_args += ['-G', 'Visual Studio 15 2017 Win64']
+        if platform.system() == 'Linux':
+            cmake_args += ['-G', 'Ninja']
 
         if subprocess.Popen(cmake_args, cwd=build_dir).wait():
              return False
