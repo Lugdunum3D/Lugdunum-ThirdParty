@@ -29,7 +29,7 @@ Lugdunum3D/LugBench :
     android_thirdparty.yml
 
 # Android
-- You msut set the env variable ANDROID_SDK_ROOT with the path to your Android SDK
+- You must set the env variable ANDROID_SDK_ROOT with the path to your Android SDK
 - You need to specify --android=True as argument of build.py
 
 # How to use
