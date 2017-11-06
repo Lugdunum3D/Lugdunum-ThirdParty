@@ -20,7 +20,8 @@ builder_classes = {
     'curl': builders.Curl,
     'restclient': builders.Restclient,
     'freetype': builders.Freetype,
-    'imgui_club': builders.Imgui_club
+    'imgui_club': builders.Imgui_club,
+    'lugdunum': builders.Lugdunum
 }
 
 def main():
