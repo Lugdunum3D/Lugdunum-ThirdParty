@@ -51,6 +51,16 @@ class Lugdunum(Builder):
         if platform.system() == 'Linux':
             cmake_args += ['-G', 'Ninja']
 
+        if self.android_config['enabled']:
+            cmake_args[0] = self.android_config['cmake_executable']
+            cmake_args += ['-G', 'Android Gradle - Unix Makefiles']
+            cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=%s' % self.android_config['cmake_toolchain']]
+            cmake_args += ['-DANDROID_PLATFORM=android-24']
+            cmake_args += ['-DANDROID_ABI=arm64-v8a']
+            cmake_args += ['-DANDROID_STL=c++_shared']
+            cmake_args += ['-DANDROID_UNIFIED_HEADERS=ON']
+            cmake_args += ['-DANDROID=ON']
+
         if subprocess.Popen(cmake_args, cwd=build_dir).wait():
              return False
 
