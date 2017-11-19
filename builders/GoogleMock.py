@@ -50,10 +50,10 @@ class GoogleMock(Builder):
         if platform.system() == 'Linux':
             cmake_args += ['-G', 'Ninja']
 
-        if self.build_android:
-            cmake_args[0] = os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.4111459/bin/cmake'
+        if self.android_config['enabled']:
+            cmake_args[0] = self.android_config['cmake_executable']
             cmake_args += ['-G', 'Android Gradle - Unix Makefiles']
-            cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=%s' % os.environ.get("ANDROID_SDK_ROOT") + '/ndk-bundle/build/cmake/android.toolchain.cmake']
+            cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=%s' % self.android_config['cmake_toolchain']]
             cmake_args += ['-DANDROID_PLATFORM=android-24']
             cmake_args += ['-DANDROID_ABI=arm64-v8a']
             cmake_args += ['-DANDROID_STL=c++_shared']
@@ -101,7 +101,7 @@ class GoogleMock(Builder):
 
             suffix = 'd' if build_type == 'Debug' else ''
 
-            if self.build_android or platform.system() == 'Linux':
+            if self.android_config['enabled'] or platform.system() == 'Linux':
                 shutil.copy(os.path.join('googletest/build', build_type, 'googlemock/gtest/libgtest.a'),                    os.path.join(googlemock_library_path, 'libgtest' + suffix + '.a'))
                 shutil.copy(os.path.join('googletest/build', build_type, 'googlemock/gtest/libgtest_main.a'),               os.path.join(googlemock_library_path, 'libgtest_main' + suffix + '.a'))
                 shutil.copy(os.path.join('googletest/build', build_type, 'googlemock/libgmock.a'),                          os.path.join(googlemock_library_path, 'libgmock' + suffix + '.a'))

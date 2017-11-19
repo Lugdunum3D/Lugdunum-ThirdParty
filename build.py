@@ -4,6 +4,8 @@ import os
 import sys
 import yaml
 import zipfile
+import shutil
+import glob
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -70,10 +72,45 @@ def main():
     with open(args.config_file) as file:
         config = yaml.load(file)
 
+    android_config = dict()
+    android_config['enabled'] = args.android
     if args.android:
-        if not os.environ.get("ANDROID_SDK_ROOT"):
+        # Find SDK
+        if not os.environ.get('ANDROID_SDK_ROOT'):
             logger.error('Can\'t find ANDROID_SDK_ROOT environment variable')
             sys.exit(1)
+        else:
+            android_config['sdk_root'] = os.environ.get('ANDROID_SDK_ROOT')
+
+        if not os.path.isdir(android_config['sdk_root']):
+            logger.error('CMake NDK not found: `' + android_config['sdk_root'] + '`')
+            sys.exit(1)
+
+        # Find NDK
+        if os.environ.get('ANDROID_NDK_ROOT'):
+            android_config['ndk_root'] = os.environ.get('ANDROID_NDK_ROOT')
+        else:
+            android_config['ndk_root'] = android_config['sdk_root'] + '/ndk-bundle'
+
+        if not os.path.isdir(android_config['ndk_root']):
+            logger.error('CMake NDK not found: `' + android_config['ndk_root'] + '`')
+
+        # Find CMake and toolchain
+        android_config['cmake_executable'] = shutil.which('cmake', path=':'.join(
+            # Sort in case we have multiple versions (invert order to pick the latest)
+            sorted(glob.glob(os.environ.get('ANDROID_SDK_ROOT') + '/cmake/*/bin/'), reverse=True)
+        ))
+        android_config['cmake_toolchain'] = android_config['ndk_root'] + '/build/cmake/android.toolchain.cmake'
+
+        if not android_config['cmake_executable']:
+            logger.error('CMake path not found in `' + os.environ.get('ANDROID_SDK_ROOT') + '/cmake`')
+            sys.exit(1)
+        logger.info('CMake path found: `' + android_config['cmake_executable'] + '`')
+
+        if not os.path.isfile(android_config['cmake_toolchain']):
+            logger.error('CMake toolchain not found: `' + android_config['cmake_toolchain'] + '`')
+            sys.exit(1)
+        logger.info('CMake toolchain found: `' + android_config['cmake_toolchain'] + '`')
 
     # For each builders in the config file, build
     for builder_name in config:
@@ -81,7 +118,7 @@ def main():
             logger.error('Can\'t find builder for "%s"', builder_name)
             sys.exit(1)
 
-        builder = builder_classes[builder_name](args, logger, config[builder_name], args.android)
+        builder = builder_classes[builder_name](args, logger, config[builder_name], android_config)
         if not builder.build():
             logger.error('Failed to build for builder "%s"', builder_name)
             sys.exit(1)

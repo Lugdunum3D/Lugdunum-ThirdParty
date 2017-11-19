@@ -53,10 +53,10 @@ class Freetype(Builder):
         if platform.system() == 'Linux':
             cmake_args += ['-G', 'Ninja']
 
-        if self.build_android:
-            cmake_args[0] = os.environ.get("ANDROID_SDK_ROOT") + '/cmake/3.6.4111459/bin/cmake'
+        if self.android_config['enabled']:
+            cmake_args[0] = self.android_config['cmake_executable']
             cmake_args += ['-G', 'Android Gradle - Unix Makefiles']
-            cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=%s' % os.environ.get("ANDROID_SDK_ROOT") + '/ndk-bundle/build/cmake/android.toolchain.cmake']
+            cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=%s' % self.android_config['cmake_toolchain']]
             cmake_args += ['-DANDROID_PLATFORM=android-24']
             cmake_args += ['-DANDROID_ABI=arm64-v8a']
             cmake_args += ['-DANDROID_STL=c++_shared']
@@ -97,7 +97,7 @@ class Freetype(Builder):
             original_suffix = 'd' if build_type == 'Debug' else ''
             suffix = '-d' if build_type == 'Debug' else ''
 
-            if self.build_android or platform.system() == 'Linux':
+            if self.android_config['enabled'] or platform.system() == 'Linux':
                 shutil.copy(os.path.join('freetype/build', build_type, 'libfreetype' + original_suffix + '.a'),              os.path.join(freetype_library_path, 'libfreetype' + suffix + '.a'))
             elif platform.system() == 'Windows':
                 shutil.copy(os.path.join('freetype/build', build_type, build_type, 'freetype' + original_suffix + '.lib'),   os.path.join(freetype_library_path, 'freetype' + original_suffix + '.lib'))

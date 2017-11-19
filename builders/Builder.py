@@ -1,9 +1,9 @@
 class Builder():
-    def __init__(self, args, logger, config, build_android):
+    def __init__(self, args, logger, config, android_config):
         self.args = args
         self.logger = logger
         self.config = config
-        self.build_android = build_android
+        self.android_config = android_config
 
         if 'uri' not in self.config['repository']:
             self.config['repository']['uri'] = self.default_repository_uri
