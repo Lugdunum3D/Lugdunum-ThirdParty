@@ -41,8 +41,7 @@ def main():
                         dest='zip_file')
     parser.add_argument('config_file', help='Specify the configuration file to use',
                         type=str)
-    parser.add_argument('--android', help='Compiling for Android',
-                        type=bool, dest='android', default=False)
+    parser.add_argument('--android', help='Compiling for Android', dest='android', default=False, action='store_true')
 
     args = parser.parse_args()
     args.path = os.path.abspath(args.path)

@@ -31,7 +31,7 @@ Lugdunum3D/LugBench :
 # Android
 
 - You must set the env variable `ANDROID_SDK_ROOT` with the path to your Android SDK
-- You need to specify `--android=True` as argument of `build.py`
+- You need to specify `--android` as argument of `build.py`
 
 # How to use
 The python script `build.py` will use this configuration file to build an arborescence in the directory specified with the option `--path` (`thirdparty` by default).
